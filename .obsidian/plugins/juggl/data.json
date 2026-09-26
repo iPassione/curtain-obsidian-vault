@@ -1,0 +1,244 @@
+﻿{
+    "globalGraphRibbon":  true,
+    "splitDirection":  "vertical",
+    "typedLinkPrefix":  "-",
+    "useImgServer":  false,
+    "imgServerPort":  3837,
+    "debug":  false,
+    "globalStyleGroups":  [
+
+                          ],
+    "graphSettings":  {
+                          "animateLayout":  true,
+                          "autoAddNodes":  true,
+                          "autoExpand":  true,
+                          "autoZoom":  true,
+                          "coreStore":  "Obsidian",
+                          "expandInitial":  true,
+                          "fdgdLayout":  "cola",
+                          "filter":  "-class:dangling -class:file",
+                          "height":  "100%",
+                          "hoverEdges":  true,
+                          "layout":  "cola",
+                          "limit":  10000,
+                          "mergeEdges":  true,
+                          "mode":  "local",
+                          "navigator":  true,
+                          "openWithShift":  false,
+                          "readContent":  true,
+                          "styleGroups":  [
+                                              {
+                                                  "selector":  "node[!path *= \"/\"]",
+                                                  "style":  {
+                                                                "color":  "#3D2B0A",
+                                                                "background-color":  "#F0C060",
+                                                                "border-color":  "#C8963C",
+                                                                "text-outline-color":  "#FFF8E7"
+                                                            },
+                                                  "name":  "总览/MOC"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"世界观\"]",
+                                                  "style":  {
+                                                                "color":  "#FFFFFF",
+                                                                "background-color":  "#4A8CC7",
+                                                                "border-color":  "#356A9A",
+                                                                "text-outline-color":  "#356A9A"
+                                                            },
+                                                  "name":  "世界观"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"魔法体系\"]",
+                                                  "style":  {
+                                                                "color":  "#FFFFFF",
+                                                                "background-color":  "#7B5EA7",
+                                                                "border-color":  "#5C3F87",
+                                                                "text-outline-color":  "#5C3F87"
+                                                            },
+                                                  "name":  "魔法体系"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"编年史\"]",
+                                                  "style":  {
+                                                                "color":  "#FFFFFF",
+                                                                "background-color":  "#D97706",
+                                                                "border-color":  "#A85E04",
+                                                                "text-outline-color":  "#A85E04"
+                                                            },
+                                                  "name":  "编年史"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"人物/\", path !=* \"骑士团\", path !=* \"羽蛇\"]",
+                                                  "style":  {
+                                                                "color":  "#FFFFFF",
+                                                                "background-color":  "#2E9A6A",
+                                                                "border-color":  "#1E704A",
+                                                                "text-outline-color":  "#1E704A"
+                                                            },
+                                                  "name":  "人物"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"骑士团\"]",
+                                                  "style":  {
+                                                                "color":  "#1E2A3A",
+                                                                "background-color":  "#B8C5D6",
+                                                                "border-color":  "#7A8DA3",
+                                                                "text-outline-color":  "#FFFFFF"
+                                                            },
+                                                  "name":  "人物·骑士团"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"羽蛇\"]",
+                                                  "style":  {
+                                                                "color":  "#FFFFFF",
+                                                                "background-color":  "#6DB9A0",
+                                                                "border-color":  "#3D8A6E",
+                                                                "text-outline-color":  "#3D8A6E"
+                                                            },
+                                                  "name":  "人物·羽蛇"
+                                              },
+                                              {
+                                                  "selector":  "node[path *= \"短篇\"]",
+                                                  "style":  {
+                                                                "color":  "#FFFFFF",
+                                                                "background-color":  "#E0485A",
+                                                                "border-color":  "#B03040",
+                                                                "text-outline-color":  "#B03040"
+                                                            },
+                                                  "name":  "短篇"
+                                              }
+                                          ],
+                          "toolbar":  true,
+                          "width":  "100%",
+                          "zoomSpeed":  1.3
+                      },
+    "globalGraphSettings":  {
+                                "animateLayout":  true,
+                                "autoAddNodes":  true,
+                                "autoExpand":  false,
+                                "autoZoom":  true,
+                                "coreStore":  "Obsidian",
+                                "expandInitial":  false,
+                                "fdgdLayout":  "cola",
+                                "filter":  "-class:dangling -class:file",
+                                "height":  "100%",
+                                "width":  "100%",
+                                "limit":  10000,
+                                "hoverEdges":  true,
+                                "layout":  "cola",
+                                "mergeEdges":  true,
+                                "mode":  "workspace",
+                                "navigator":  true,
+                                "openWithShift":  false,
+                                "readContent":  false,
+                                "styleGroups":  [
+                                                    {
+                                                        "selector":  "node[!path *= \"/\"]",
+                                                        "style":  {
+                                                                      "color":  "#3D2B0A",
+                                                                      "background-color":  "#F0C060",
+                                                                      "border-color":  "#C8963C",
+                                                                      "text-outline-color":  "#FFF8E7"
+                                                                  },
+                                                        "name":  "总览/MOC"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"世界观\"]",
+                                                        "style":  {
+                                                                      "color":  "#FFFFFF",
+                                                                      "background-color":  "#4A8CC7",
+                                                                      "border-color":  "#356A9A",
+                                                                      "text-outline-color":  "#356A9A"
+                                                                  },
+                                                        "name":  "世界观"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"魔法体系\"]",
+                                                        "style":  {
+                                                                      "color":  "#FFFFFF",
+                                                                      "background-color":  "#7B5EA7",
+                                                                      "border-color":  "#5C3F87",
+                                                                      "text-outline-color":  "#5C3F87"
+                                                                  },
+                                                        "name":  "魔法体系"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"编年史\"]",
+                                                        "style":  {
+                                                                      "color":  "#FFFFFF",
+                                                                      "background-color":  "#D97706",
+                                                                      "border-color":  "#A85E04",
+                                                                      "text-outline-color":  "#A85E04"
+                                                                  },
+                                                        "name":  "编年史"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"人物/\", path !=* \"骑士团\", path !=* \"羽蛇\"]",
+                                                        "style":  {
+                                                                      "color":  "#FFFFFF",
+                                                                      "background-color":  "#2E9A6A",
+                                                                      "border-color":  "#1E704A",
+                                                                      "text-outline-color":  "#1E704A"
+                                                                  },
+                                                        "name":  "人物"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"骑士团\"]",
+                                                        "style":  {
+                                                                      "color":  "#1E2A3A",
+                                                                      "background-color":  "#B8C5D6",
+                                                                      "border-color":  "#7A8DA3",
+                                                                      "text-outline-color":  "#FFFFFF"
+                                                                  },
+                                                        "name":  "人物·骑士团"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"羽蛇\"]",
+                                                        "style":  {
+                                                                      "color":  "#FFFFFF",
+                                                                      "background-color":  "#6DB9A0",
+                                                                      "border-color":  "#3D8A6E",
+                                                                      "text-outline-color":  "#3D8A6E"
+                                                                  },
+                                                        "name":  "人物·羽蛇"
+                                                    },
+                                                    {
+                                                        "selector":  "node[path *= \"短篇\"]",
+                                                        "style":  {
+                                                                      "color":  "#FFFFFF",
+                                                                      "background-color":  "#E0485A",
+                                                                      "border-color":  "#B03040",
+                                                                      "text-outline-color":  "#B03040"
+                                                                  },
+                                                        "name":  "短篇"
+                                                    }
+                                                ],
+                                "toolbar":  true,
+                                "zoomSpeed":  1.3
+                            },
+    "embedSettings":  {
+                          "animateLayout":  true,
+                          "autoAddNodes":  false,
+                          "autoExpand":  true,
+                          "autoZoom":  true,
+                          "coreStore":  "Obsidian",
+                          "expandInitial":  true,
+                          "fdgdLayout":  "cola",
+                          "filter":  "",
+                          "height":  "400px",
+                          "hoverEdges":  true,
+                          "layout":  "force-directed",
+                          "limit":  1000,
+                          "mergeEdges":  true,
+                          "mode":  "local",
+                          "navigator":  false,
+                          "openWithShift":  false,
+                          "readContent":  true,
+                          "styleGroups":  [
+
+                                          ],
+                          "toolbar":  true,
+                          "width":  "100%",
+                          "zoomSpeed":  1.2
+                      }
+}

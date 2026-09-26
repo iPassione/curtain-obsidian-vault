@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>帷幕世界 · 魔法体系适配测试</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--cream:#f5f0e4;--parch:#ede4cc;--ink:#1e1a0f;--ink-l:#3d3520;--ink-ll:#6b5e3a;--gold:#8b6914;--gold-l:#c9a227;--gold-ll:#f0d860;--border:rgba(100,75,20,0.25);--border-h:rgba(140,105,30,0.5);--purple:#4a2e6a;--purple-l:#7b5ea7;--purple-ll:#c0a8e0;--purple-dk:#2a1a3a;--r:3px}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC',Georgia,serif;background:var(--parch);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 50% 35% at 25% 10%,rgba(180,140,40,0.12) 0%,transparent 55%),radial-gradient(ellipse 40% 45% at 80% 85%,rgba(74,46,106,0.10) 0%,transparent 50%),radial-gradient(ellipse 60% 30% at 60% 60%,rgba(200,180,60,0.06) 0%,transparent 40%),linear-gradient(180deg,rgba(220,200,150,0.06) 0%,transparent 40%,rgba(160,130,60,0.04) 100%)}
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 32px 80px}
+.hero-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-star{position:absolute;width:2px;height:2px;background:rgba(200,160,40,0.5);border-radius:50%;animation:twinkle 3s infinite alternate}
+@keyframes twinkle{0%{opacity:0.2}100%{opacity:0.8}}
+.hero-frame{position:relative;max-width:640px;width:100%;padding:56px 48px 48px;border:1px solid var(--gold)}
+.hero-frame::before{content:'';position:absolute;inset:6px;border:1px solid rgba(139,105,20,0.3);pointer-events:none}
+.hero-frame .corner{position:absolute;width:26px;height:26px;border-color:var(--gold-l);border-style:solid}
+.corner-tl{top:-1px;left:-1px;border-width:2px 0 0 2px}.corner-tr{top:-1px;right:-1px;border-width:2px 2px 0 0}.corner-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}.corner-br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.hero-sub{font-family:'Cinzel',serif;font-size:10px;letter-spacing:5px;color:var(--purple-l);margin-bottom:20px}
+#hero h1{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(17px,3.5vw,25px);font-weight:700;letter-spacing:2px;color:var(--ink);line-height:1.5;margin-bottom:8px}
+.hero-desc{font-size:13px;color:var(--ink-ll);letter-spacing:2px;font-weight:300;margin-bottom:24px;line-height:1.8}
+.hero-meta{display:flex;justify-content:center;gap:0;margin-bottom:32px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.hero-meta-item{flex:1;padding:14px 16px;text-align:center;border-right:1px solid var(--border)}.hero-meta-item:last-child{border-right:none}
+.hmi-val{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);display:block;margin-bottom:3px}
+.hmi-lbl{font-size:10px;color:var(--ink-ll);letter-spacing:1px}
+.btn-enter{display:inline-block;padding:15px 56px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:4px;color:var(--cream);background:var(--ink);border:1px solid var(--ink-l);border-radius:var(--r);cursor:pointer;transition:background .25s,letter-spacing .25s,box-shadow .25s;box-shadow:0 4px 20px rgba(30,20,5,.2)}
+.btn-enter:hover{background:var(--ink-l);letter-spacing:5px;box-shadow:0 8px 30px rgba(30,20,5,.3)}
+.hero-note{margin-top:22px;font-size:11px;color:var(--ink-ll);letter-spacing:1px}
+#quiz-screen{display:none;position:relative;z-index:1}
+#quiz-header{position:sticky;top:0;z-index:50;background:rgba(237,228,204,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:14px}
+.qh-title{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qh-track{flex:2;max-width:200px;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.qh-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--gold-l));border-radius:2px;width:0%;transition:width .4s ease}
+.qh-count{font-family:'Cinzel',serif;font-size:11px;color:var(--ink-ll);white-space:nowrap}
+#quiz-body{max-width:760px;margin:0 auto;padding:48px 24px 120px}
+.section-hd{display:flex;align-items:center;gap:16px;margin:40px 0 28px}
+.section-hd-line{flex:1;height:1px;background:var(--border-h)}
+.section-hd-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--purple);white-space:nowrap}
+.section-hd-sub{font-size:11px;color:var(--ink-ll)}
+.q-card{background:rgba(245,240,228,0.7);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-bottom:14px;transition:border-color .2s}
+.q-card:hover{border-color:var(--border-h)}.q-card.is-answered{border-color:rgba(74,46,106,0.35);background:rgba(74,46,106,0.03)}
+.q-card.anim-in{opacity:0;transform:translateY(16px)}
+.q-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.q-num{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;color:var(--ink-ll);background:var(--parch);border:1px solid var(--border);padding:3px 9px;border-radius:2px}
+.q-text{font-size:15px;line-height:1.9;color:var(--ink);margin-bottom:20px}
+.likert{display:flex;gap:6px;align-items:stretch}
+.likert-opt{flex:1;padding:10px 4px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;text-align:center;font-size:11px;color:var(--ink-ll);background:rgba(245,240,228,0.5);transition:all .15s;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.4}
+.likert-opt:hover:not(:disabled){border-color:var(--purple-l);background:rgba(123,94,167,0.08);color:var(--ink)}
+.likert-opt.sel{border-color:var(--purple-l);background:rgba(123,94,167,0.12);color:var(--ink)}
+.likert-opt:disabled{cursor:default;opacity:0.6}
+.likert-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .15s}
+.likert-opt.sel .likert-dot{background:var(--purple-l);box-shadow:0 0 6px rgba(123,94,167,0.4)}
+#submit-area{text-align:center;padding:20px 0 40px;border-top:1px solid var(--border);margin-top:48px}
+.submit-hint{font-size:12px;color:var(--ink-ll);margin-bottom:18px;letter-spacing:1px}
+.btn-submit{padding:15px 60px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:4px;color:var(--cream);background:var(--ink);border:1px solid var(--ink-l);border-radius:var(--r);cursor:pointer;transition:background .25s,letter-spacing .25s;box-shadow:0 4px 20px rgba(30,20,5,.18)}
+.btn-submit:hover{background:var(--ink-l);letter-spacing:5px}.btn-submit:disabled{opacity:.4;cursor:not-allowed}
+#result-screen{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,12,4,0.82);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px}
+#result-screen.show{display:flex}
+.result-card{background:var(--parch);border:1px solid var(--gold);border-radius:var(--r);max-width:600px;width:100%;position:relative;box-shadow:0 24px 80px rgba(20,12,4,.5);overflow:hidden;margin:auto}
+.result-top{background:linear-gradient(165deg,var(--ink),var(--purple-dk));padding:40px 32px 32px;text-align:center;position:relative}
+.result-top::after{content:'';position:absolute;bottom:0;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-l) 45%,var(--gold-l) 55%,transparent)}
+.result-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:rgba(201,162,39,0.7);margin-bottom:14px}
+.result-system-name{font-family:'Cinzel Decorative',serif;font-size:30px;font-weight:700;color:var(--gold-ll);letter-spacing:3px;margin-bottom:6px}
+.result-system-eng{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:rgba(240,216,96,0.5);margin-bottom:8px}
+.result-world{font-size:11px;color:rgba(200,160,120,0.6);letter-spacing:2px;margin-bottom:18px}
+.result-body{padding:20px 26px 24px}
+.result-comment{font-size:13px;line-height:1.75;color:var(--ink-l);padding:22px 24px;border:1px solid var(--border);border-radius:var(--r);background:rgba(237,228,204,0.4);margin-bottom:20px;border-left:3px solid var(--gold)}
+.result-advice{margin-bottom:20px;padding:18px 20px;border:1px solid rgba(139,105,20,0.25);border-radius:var(--r);background:rgba(237,228,204,0.35)}
+.result-advice-hd{font-family:"Cinzel",serif;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;text-transform:uppercase}
+.result-advice-content{font-size:12.5px;line-height:1.75};color:var(--ink-l)}
+.result-rank-hd{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--ink-ll);margin-bottom:16px}
+.rank-item{display:flex;align-items:center;gap:14px;margin-bottom:8px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--r);background:rgba(245,240,228,0.4)}
+.rank-item.top{border-color:rgba(139,105,20,0.5);background:rgba(139,105,20,0.06)}
+.rank-num{font-family:'Cinzel',serif;font-size:15px;font-weight:600;color:var(--gold);min-width:22px}
+.rank-name{flex:1;font-size:13px;color:var(--ink);font-weight:600}
+.rank-bar-wrap{flex:3;height:7px;background:var(--border);border-radius:4px;overflow:hidden;max-width:200px}
+.rank-bar{height:100%;background:linear-gradient(90deg,var(--purple),var(--gold-l));border-radius:4px;}
+.rank-pct{font-size:11px;color:var(--ink-ll);min-width:36px;text-align:right}
+.btn-close-result{display:block;width:100%;padding:14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:4px;color:var(--cream);background:var(--ink);border:none;cursor:pointer;transition:background .2s;margin-top:28px}
+.btn-close-result:hover{background:var(--ink-l)}
+.result-footnote{text-align:center;margin-top:20px;font-size:10px;color:var(--ink-ll);letter-spacing:1px}
+@media(max-width:600px){.hero-frame{padding:32px 20px 28px}#quiz-body{padding:32px 14px 100px}.q-card{padding:20px 16px}.likert-opt{font-size:10px;padding:8px 2px}.result-top{padding:26px 18px}.result-body{padding:20px 18px}.result-system-name{font-size:24px}}
+
+
+/* Hero exit animation */
+#hero.hero-exit {
+  animation: heroOut 0.3s ease-in forwards;
+}
+@keyframes heroOut {
+  to { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Card entrance */
+.q-card.card-in {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: cardEnter 0.35s ease-out forwards;
+}
+@keyframes cardEnter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Result card entrance */
+.result-card.result-in {
+  animation: resultEnter 0.4s ease-out forwards;
+}
+@keyframes resultEnter {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Rank bar has transition already from existing CSS, just needs initial width:0 */
+</style>
+</head>
+<body>
+<section id="hero">
+<div class="hero-stars" id="heroStars"></div>
+<div class="hero-frame">
+<div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div><div class="corner corner-br"></div>
+<div class="hero-sub">Magical Aptitude Assessment</div>
+<h1>帷幕世界<br>魔法体系适配测试</h1>
+<div class="hero-desc">20 道陈述 · 5 档程度量表<br>探寻与你灵魂共鸣的魔法之道</div>
+<div class="hero-meta">
+<div class="hero-meta-item"><span class="hmi-val">10</span><span class="hmi-lbl">魔法体系</span></div>
+<div class="hero-meta-item"><span class="hmi-val">20</span><span class="hmi-lbl">测试题</span></div>
+<div class="hero-meta-item"><span class="hmi-val">~5 min</span><span class="hmi-lbl">预计用时</span></div>
+</div>
+<button class="btn-enter" onclick="startQuiz()">进 入 测 试</button>
+<div class="hero-note">基于帷幕世界设定库 · SAINT DESELLE</div>
+</div>
+</section>
+
+<div id="quiz-screen">
+<div id="quiz-header">
+<span class="qh-title">SAINT DESELLE · 魔法体系适配测试</span>
+<div class="qh-track"><div class="qh-fill" id="qhFill"></div></div>
+<span class="qh-count" id="qhCount">0 / 20</span>
+</div>
+<div id="quiz-body"></div>
+</div>
+
+<div id="result-screen"><div class="result-card" id="resultCard"></div></div>
+
+<script>
+(function(){var s=document.getElementById("heroStars");if(s)for(var i=0;i<40;i++){var d=document.createElement("div");d.className="hero-star";d.style.left=Math.random()*100+"%";d.style.top=Math.random()*100+"%";d.style.animationDelay=Math.random()*4+"s";s.appendChild(d)}})();
+</script>
+<script>
+// === MAGIC SYSTEM COMPATIBILITY TEST (MBTI DIMENSION MATCHING) ===
+var SYSTEMS = {"storm":{"name":"风暴魔法","eng":"Storm Magic","emoji":"🌩️","world":"物质世界·风吟塔","analysis":"如果有一件事能让你坐立不安，那大概是无休止的讨论。当别人还在推演利弊、排列选项的时候，你已经迈出去了。你觉得站在原地就能想清楚的事，走两步以后往往会发现全变了样。\n\n你习惯处在动荡的中心。风吹过来的时候你不闭眼，也不躲，身边一直有风，而你也一直睁着眼睛。在谨慎的人看来这是冒险，可是对你来讲，犹豫要付出的代价通常比出错更大。\n\n风暴魔法盯上的就是这种特质。一种安静的笃定，跟横冲直撞的鲁莽完全不同。你知道行动本身就是最好的信息渠道，做了再说，错了再改。你已经这样活了很久了。","advice":"去一片开阔地，站着。闭眼。感受风从哪边来，别急着分析它，先让它穿过。每天十分钟，连续十天。先让风认识你。它认识了，再开始学咒语。"},"dom":{"name":"支配魔法","eng":"Domination Magic","emoji":"🔆","world":"镜中世界·卡莫瑞亚","analysis":"事情到了你手里会往前走。你甚至不一定能意识到自己在主导。对你来说，让一团混沌回到清晰，是一种跟呼吸一样自然的反应。开口之前，你通常已经想好了要往哪走。这种习惯让你在混乱中显得格外沉静。\n\n你受不了大家在原地打转。方向感在你身上从来都明确，明确到有时候你自己都没注意到，周围人已经跟着你走了。你不需要所有人服从你，你只是没法忍受没人站出来。\n\n支配魔法看重的从来跟魔力强度没有关系。它看上的是那种开口之前就把落点想好的精准。你已经习惯了承揽方向，那扇窄门你认识。","advice":"找一颗弹珠，放在桌面上。让它向左滚动三厘米，平缓地滑过去，匀速，不弹跳。每天五分钟，直到距离感长进手里。支配魔法从克制开始，力量会在克制之后自己找上门。"},"craft":{"name":"造物魔法","eng":"Creation Magic","emoji":"🛠️","world":"物质世界·艾森洛德","analysis":"你能在重复的事情里找到平静。这对很多人来说是一种折磨，对你来说是一种享受。你不急着收工，东西没做好就交出去，还不如没做。你享受的是那个慢慢变好的过程，而完美只是偶尔赠送的副产物。\n\n你造的每一件东西都会留下你的指纹。别人看不出来，你自己一摸就知道。这里是我做的。这里还差一点。你做的东西终有一天会有自己的生命，你珍惜的是亲手把它带到这个世界上的那段时光。\n\n造物魔法长在耐心上。它不挑天才，它挑的是那些能日复一日把注意力浇在同一件事上的人。","advice":"做一颗会发光的珠子。每天同一时间，同一颗，维持它发光十分钟以上。连续一个月，中间不要断。珠子发光的天数替你计分。维持的时间越长，你和它之间的联结就越深。联结长成了，再大的造物也是同一回事。"},"divin":{"name":"占卜预言","eng":"Divination Magic","emoji":"🔭","world":"星之世界","analysis":"你不急着出手。你把足够多的碎片摆在一起，让它们自己拼出形状，然后才决定迈哪只脚。你花比别人多得多的时间收集信息、交叉验证。有人觉得这太慢了，但你心里清楚，快一步然后走错方向，花在回头上的时间远远超过你省下来的那一点。\n\n二手判断在你这里永远不够。你得亲自看，亲自验证，亲自下结论。这个习惯推着你把每一个做过的决定来来回回翻看，直到整幅拼图一块都不缺。\n\n占卜预言的根基是密度。碎片积到某个临界点，自己开始说话。你已经在做这件事了。","advice":"选一个你关心的话题。接下来一周，每天花五分钟，用三个不同来源的信息交叉验证，写下你自己的判断。先别碰任何占卜工具。一周之后回过头来读一遍，有些东西已经开始说话了。"},"dream":{"name":"梦境魔法","eng":"Dream Magic","emoji":"🌙","world":"灵之世界","analysis":"你对自己的梦记得很清楚。你信任直觉给你的信号，事后也常常发现那些说不清原因的感觉是准的。你能解释的时候不多，但你已经学会了信任这种能力。跟着内心的指示走，在你身上从来都很自然。\n\n醒着的时候，你有一部分注意力一直留在潜意识的边界上。那个部分不说话，但它知道很多你的理智还没来得及接收的信息。你一直知道怎么跟它共处。你在问卷里做选择的时候，很可能就是它在替你按的按钮。\n\n梦境魔法的门槛很低。它不要求你会什么咒语，它只要求你认真对待那些你已经感觉到、但还没用语言组织的东西。","advice":"床头放一本空本子，一支笔。每天早上醒了第一件事：把梦记下来，别先碰任何别的东西。只记得一个颜色也行，三个字也行。三个月后往回翻，你会看到一条你自己没画、但一直在走的路。先学会听，造梦是后来的事。"},"blood":{"name":"血魔法","eng":"Blood Magic","emoji":"🩸","world":"物质世界","analysis":"你身上有一种不肯打折的底色。定了目标就愿意扛代价，而且你对自己要付多少代价心里有数。你不会为了侥幸随便下注，但当真决定要什么的时候，你的认真程度会让周围人紧张。你把筹码推到底的果断跟鲁莽之间有一条线，那条线你心里一直有。\n\n免费的午餐很早就从你的字典里消失了。你相信等价交换，也相信代价本身是有分量的。愿意扛，也扛得住，这几笔很重，是你的答案里压在最底下的那层。\n\n血魔法挑人的标准很原始：你敢不敢把一件东西放上天平，然后真的接受天平另一边的结果。","advice":"每个月选一个安静的晚上。郑重地放掉一件事，一个习惯，一段执念，一个已经不再属于你的承诺。当着一位你信得过的人的面把它念出来，然后真的放掉。观察空出来的位置长出了什么。血魔法只用那个瞬间计数：你真正割下去的那个瞬间。"},"mirror":{"name":"镜中魔法","eng":"Mirror Realm Magic","emoji":"🪞","world":"镜中世界","analysis":"当所有人朝同一个方向走的时候，你会停下来看一眼背后。你不太会被「大家都这样」说服，也不太会被「从来如此」安抚。你对既定的规则产生怀疑的时候，是真的觉得答案可能藏在反面。\n\n这种逆向的视角在你身上来得很自然。它不需要酝酿，也不需要鼓足勇气，它就是你的第一反应。你已经在所有理所当然的地方自动打上了问号，这些问号长在你思考的方式里，没有什么外力能把它拔掉。\n\n镜中世界挑人的方式很残酷。它要的从来都是诚实：你是真的不在乎大多数人在想什么，还是只是在扮演不在乎？","advice":"每天做一件反着来的小事。用左手刷牙。倒着读一页书。在已经知道答案的事情上认真问自己一句：万一反了呢？坚持一个月。你的大脑会在那些看上去最稳当的地方自动多打一个问号。这个问号就是你的入场券。"},"time":{"name":"时间魔法","eng":"Time Magic","emoji":"⏳","world":"时间长河","analysis":"你能跟悬而未决共处。别人焦虑的时候你在观察，别人催促的时候你在等，等那个真正该出手的时机。你知道有些事急不来，急来的东西也留不住。不急着把每一个空白填满，在你这里是一种主动的选择。\n\n你的耐心跟被动完全无关。你只是选择让事情在自己该发生的时间发生，按照自己的节奏走。你的时间有自己的刻度，跟身边大多数人的尺子不一样。你看着慢了半拍，实际上你看的是另一面表。\n\n时间长河不奖励勤奋，它奖励刚刚好。早一秒和晚一秒之间，隔着的时间魔法师耗尽一生去校准的那道缝隙。","advice":"每天闭眼感知一分钟，不借助任何工具。误差在三秒以内就算过关，超过十秒就重来。连续一周。跟时间做交易的第一条规矩：你得先让它相信你愿意等。它信了，才会开始跟你说话。"},"star":{"name":"星辰魔法","eng":"Star Magic","emoji":"✨","world":"星之世界","analysis":"你经常花时间思考那些没有实用价值的问题。宇宙有没有边界。时间有没有起点。这些追问在别人眼里是走神，在你这里是正事。你追问日常背后的东西，不需要任何实用理由。\n\n你手里从来不缺答案，可你更感兴趣的永远是下一个问题。一个答案能让人安心，一个问题能让人醒着。你选的是后者。这种选择让你在人群中显得有点游离，但那是因为你在看更远的东西。\n\n星辰魔法的学徒花三年提的问题通常远远超过答案的数量。他们不缺答案，他们缺的是下一个值得追的问题。","advice":"今晚找一个没有云的窗口，把你的注意力放在一颗星上。记住它的位置和亮度。明天同一时间再去，重复七天。当你能在阴天也感觉到它大概在哪个方位的时候，那颗星开始认识你了。星辰魔法的起点，是跟一颗星建立只属于你们两个人的联结。"},"life":{"name":"生命魔法","eng":"Life Magic","emoji":"🌱","world":"人间","analysis":"手伸出去的时候你还没意识到自己在做什么。你只是觉得那个人需要帮忙，而你能帮。你的力量很少用来对抗什么东西，更多时候是在让一块干涸的土壤重新变得可以生长。\n\n你不会大肆声张自己的付出。你做的事情经常不留下名字，只留下结果。那个人好了，那件事成了，那块地又开始长东西了。你周围的人可能说不清楚你具体做了什么，少了你，他们很快就会感觉到。\n\n生命魔法在整个帷幕世界的魔法生态里是最冷门的支派。冷门到一年收不了几个学生。因为它慢。也因为它的力量太安静了，安静到大多数人路过的时候看不见。","advice":"养一株植物，任何植物。每天五分钟，只是看着它，浇水，注意叶子的朝向和土壤的颜色。先不用咒语。三个月后你会注意到一些以前从来没注意过的东西：它今天不太高兴，这片叶子是昨天夜里转过来的。这时候你就入了门。生命魔法长在注意力落在另一个生命上的方式里，咒语只是后来的事。"}};
+var QUESTIONS = [{"id":1,"text":"团队里讨论了太久没有结论的时候，我会忍不住先动手——任何行动都比原地打转强。","dim":0},{"id":2,"text":"事情偏离计划的时候，我的第一反应是出手把它拉回来。","dim":1},{"id":3,"text":"我宁愿花一个下午把一件事做到自己满意，也不愿意同时推五件差不多的事。","dim":2},{"id":4,"text":"跟人争论的时候，事实和逻辑比情绪更能让我信服。","dim":3},{"id":5,"text":"代价足够大，回报也足够大的话——我愿意赌。","dim":4},{"id":6,"text":"在混乱的局面里，我往往是那个站出来定方向的人。","dim":1},{"id":7,"text":"一个宏大的想法能让我兴奋一整个星期，在脑子里反复搭建它。","dim":2},{"id":8,"text":"进入一个完全陌生的领域时，我的第一步是大量阅读和调研，把地图画清楚再走。","dim":3},{"id":9,"text":"绝大多数人接受的东西，我直觉上会先打一个问号。","dim":4},{"id":10,"text":"与其反复权衡，我更习惯先做点什么——大不了做错了再改。","dim":0},{"id":11,"text":"我喜欢把手头的事彻底收尾再开下一件，半成品挂在身上让我浑身不舒服。","dim":2},{"id":12,"text":"花三天想清楚再花一天做完，比花四天边做边想要靠谱得多。","dim":3},{"id":13,"text":"一件事被所有人说不可能，我反而更想碰一碰。","dim":4},{"id":14,"text":"长时间没有明确进展的时候，我会坐立不安。","dim":0},{"id":15,"text":"我不太喜欢被人安排——自己的路自己定，走错了也认。","dim":1},{"id":16,"text":"两个旗鼓相当的选择摆在面前时，我最终会跟着直觉走——逻辑在那种时刻帮不上忙。","dim":3},{"id":17,"text":"别人托付的事，我一定会办到底，哪怕中途发现比预想的难很多。","dim":0},{"id":18,"text":"我发自内心地享受把一件事反复打磨，直到它刚好是我脑子里的样子。","dim":2},{"id":19,"text":"我看不惯有人在团队里和稀泥——该拍板的时候就拍板。","dim":1},{"id":20,"text":"与其分散精力同时追好几个目标，我更愿意把所有筹码押在一个方向上。","dim":4}]
+var PROFILES = {"storm": [90, 70, 40, 30, 80], "dom": [60, 95, 50, 60, 50], "craft": [40, 60, 95, 65, 60], "divin": [30, 50, 70, 95, 40], "dream": [20, 25, 30, 5, 30], "blood": [65, 55, 60, 45, 95], "mirror": [35, 15, 40, 20, 5], "time": [5, 30, 45, 55, 35], "star": [25, 20, 10, 35, 25], "life": [15, 5, 50, 40, 70]};
+var DIM_NAMES = ["行动-反思","掌控-顺应","精密-宏阔","理性-直觉","承诺-质疑"];
+
+var answers = {};
+var submitted = false;
+var TOTAL_Q = QUESTIONS.length;
+
+function startQuiz() {
+  var hero = document.getElementById("hero");
+  hero.classList.add("hero-exit");
+  setTimeout(function() {
+    hero.style.display = "none";
+    document.getElementById("quiz-screen").style.display = "block";
+    renderQuiz();
+    window.scrollTo(0, 0);
+  }, 300);
+}
+
+function renderQuiz() {
+  var body = document.getElementById("quiz-body");
+  body.innerHTML = "";
+  var hd = document.createElement("div");
+  hd.className = "section-hd";
+  hd.innerHTML = "<div class=\"section-hd-line\"></div><div><span class=\"section-hd-title\">请根据你的真实感受选择每项陈述的同意程度</span><br><span class=\"section-hd-sub\">1=非常不同意 &nbsp; 5=非常同意</span></div><div class=\"section-hd-line\"></div>";
+  body.appendChild(hd);
+  var labels = ["非常不同意", "不太同意", "中立", "比较同意", "非常同意"];
+  QUESTIONS.forEach(function(q) {
+    var card = document.createElement("div");
+    card.className = "q-card";
+    card.id = "qcard-" + q.id;
+    var optsHTML = "";
+    for (var v = 1; v <= 5; v++) {
+      optsHTML += "<button class=\"likert-opt\" data-q=\"" + q.id + "\" data-dim=\"" + q.dim + "\" data-v=\"" + v + "\" onclick=\"pick(this)\"><span class=\"likert-dot\"></span>" + labels[v-1] + "</button>";
+    }
+    card.innerHTML = "<div class=\"q-header\"><span class=\"q-num\">第 " + q.id + " 题</span></div><div class=\"q-text\">" + q.text + "</div><div class=\"likert\">" + optsHTML + "</div>";
+    body.appendChild(card);
+  });
+  var sub = document.createElement("div");
+  sub.id = "submit-area";
+  sub.innerHTML = "<div class=\"submit-hint\">请确认所有题目均已作答后提交</div><button class=\"btn-submit\" id=\"btnSubmit\" onclick=\"submitQuiz()\">提交答案</button>";
+  body.appendChild(sub);
+}
+
+function pick(btn) {
+  if (submitted) return;
+  var qid = parseInt(btn.dataset.q);
+  var dim = parseInt(btn.dataset.dim);
+  var val = parseInt(btn.dataset.v);
+  answers[qid] = {dim: dim, v: val};
+  var card = btn.closest(".q-card");
+  card.querySelectorAll(".likert-opt").forEach(function(b) { b.classList.remove("sel"); });
+  btn.classList.add("sel");
+  card.classList.add("is-answered");
+  updateProgress();
+}
+
+function updateProgress() {
+  var count = Object.keys(answers).length;
+  document.getElementById("qhFill").style.width = Math.round(count / TOTAL_Q * 100) + "%";
+  document.getElementById("qhCount").textContent = count + " / " + TOTAL_Q;
+}
+
+function submitQuiz() {
+  for (var i = 1; i <= TOTAL_Q; i++) {
+    if (!answers[i]) {
+      alert("请完成第 " + i + " 题后再提交。");
+      document.getElementById("qcard-" + i).scrollIntoView({behavior: "smooth", block: "center"});
+      return;
+    }
+  }
+  submitted = true;
+  document.getElementById("btnSubmit").disabled = true;
+
+  var dimScores = [0, 0, 0, 0, 0];
+  var dimCounts = [0, 0, 0, 0, 0];
+  for (var i = 1; i <= TOTAL_Q; i++) {
+    var ans = answers[i];
+    var score = (ans.v - 1) * 25;
+    dimScores[ans.dim] += score;
+    dimCounts[ans.dim] += 1;
+  }
+  var userProfile = [];
+  for (var d = 0; d < 5; d++) {
+    userProfile.push(dimScores[d] / dimCounts[d]);
+  }
+
+  var sysKeys = Object.keys(SYSTEMS);
+  var dists = {};
+  sysKeys.forEach(function(k) {
+    var p = PROFILES[k];
+    var sqSum = 0;
+    for (var d = 0; d < 5; d++) {
+      sqSum += Math.pow(userProfile[d] - p[d], 2);
+    }
+    dists[k] = Math.sqrt(sqSum);
+  });
+
+  var ranked = Object.entries(dists).sort(function(a, b) { return a[1] - b[1]; });
+  var top3 = ranked.slice(0, 3);
+  var K = 6;
+  var invSum = top3.reduce(function(s, r) { return s + Math.exp(-r[1] / K); }, 0);
+  var rankHTML = top3.map(function(r, i) {
+    var pct = Math.round(Math.exp(-r[1] / K) / invSum * 100);
+    var itemClass = i === 0 ? "rank-item top" : "rank-item";
+    var sys = SYSTEMS[r[0]];
+    return "<div class=\"" + itemClass + "\"><span class=\"rank-num\">" + (i + 1) + "</span><span class=\"rank-name\">" + sys.emoji + " " + sys.name + "</span><div class=\"rank-bar-wrap\"><div class=\"rank-bar\" style=\"width:0%\" data-width=\"" + pct + "%\"></div></div><span class=\"rank-pct\">" + pct + "%</span></div>";
+  }).join("");
+
+  var topKey = ranked[0][0];
+  var top = SYSTEMS[topKey];
+
+  var resultHTML = "";
+  resultHTML += "<div class=\"result-top\">";
+  resultHTML += "<div class=\"result-label\">SAINT DESELLE \u00b7 Magic Aptitude Assessment</div>";
+  resultHTML += "<div class=\"result-system-name\">" + top.emoji + " " + top.name + "</div>";
+  resultHTML += "<div class=\"result-system-eng\">" + top.eng + "</div>";
+  resultHTML += "<div class=\"result-world\">对应世界：" + top.world + "</div>";
+  resultHTML += "</div>";
+  resultHTML += "<div class=\"result-body\">";
+  resultHTML += "<div class=\"result-comment\">" + top.analysis.replace(/\n/g, "<br><br>") + "</div>";
+  resultHTML += "<div class=\"result-advice\"><div class=\"result-advice-hd\">学习建议</div><div class=\"result-advice-content\">" + top.advice.replace(/\n/g, "<br>") + "</div></div>";
+  resultHTML += "<div class=\"result-rank-hd\">最佳适配 \u00b7 前三位</div>";
+  resultHTML += rankHTML;
+  resultHTML += "<button class=\"btn-close-result\" onclick=\"closeResult()\">返回查看题目</button>";
+  resultHTML += "<div class=\"result-footnote\">帷幕世界设定库 \u00b7 SAINT DESELLE</div>";
+  resultHTML += "</div>";
+
+  var rs = document.getElementById("result-screen");
+  rs.classList.add("show");
+  rs.scrollTop = 0;
+  var card = document.getElementById("resultCard");
+  card.innerHTML = resultHTML;
+  card.classList.add("result-in");
+  setTimeout(function() {
+    var bars = document.querySelectorAll(".rank-bar");
+    bars.forEach(function(bar) {
+      bar.style.width = bar.getAttribute("data-width") || "50%";
+    });
+  }, 100);
+
+}
+function closeResult() {
+  var rs = document.getElementById("result-screen");
+  rs.classList.remove("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.codex-tmp-running-right/
+.trash/
+.obsidian/cache/
+.obsidian/workspace*.json
+*.zip

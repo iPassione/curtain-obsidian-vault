@@ -1,0 +1,836 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圣德赛尔五年级魔法史摸底测验</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Georgia', 'Noto Serif SC', 'STSong', serif;
+    background: #1a1208;
+    color: #d4c5a0;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Background layers */
+  .bg-layer {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* Vaulted ceiling / dome effect */
+  .bg-dome {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120vw; height: 60vh;
+    background: radial-gradient(ellipse at 50% 0%, 
+      rgba(180,140,60,0.12) 0%, 
+      rgba(140,100,30,0.06) 25%, 
+      rgba(100,70,20,0.03) 45%,
+      transparent 70%);
+    z-index: 0; pointer-events: none;
+  }
+
+  /* Subtle candles */
+  .candle {
+    position: fixed; z-index: 0; pointer-events: none;
+  }
+  .candle-flame {
+    width: 4px; height: 16px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(255,200,80,0.5), rgba(255,140,20,0.2) 60%, transparent 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 3s infinite alternate;
+    position: relative;
+  }
+  .candle-flame::after {
+    content: ''; position: absolute; top: 2px; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 10px;
+    background: radial-gradient(circle, rgba(255,220,120,0.3), transparent 70%);
+    border-radius: 50%;
+  }
+  @keyframes flicker {
+    0% { opacity: 0.6; transform: scaleY(1) rotate(0deg); }
+    25% { opacity: 0.8; transform: scaleY(1.1) rotate(1deg); }
+    50% { opacity: 0.55; transform: scaleY(0.85) rotate(-0.5deg); }
+    75% { opacity: 0.75; transform: scaleY(1.05) rotate(0.5deg); }
+    100% { opacity: 0.65; transform: scaleY(1) rotate(-0.5deg); }
+  }
+  .candle-body {
+    width: 6px; height: 20px;
+    background: linear-gradient(to bottom, #f5e6c8, #c4a66a);
+    border-radius: 1px;
+    margin: 0 auto;
+    opacity: 0.4;
+  }
+
+  .c1 { top: 8%; left: 5%; }
+  .c2 { top: 12%; right: 6%; }
+  .c3 { top: 75%; left: 3%; }
+  .c4 { top: 78%; right: 4%; }
+  .c5 { top: 40%; left: 2%; }
+  .c6 { top: 45%; right: 3%; }
+
+  /* Gold particles */
+  .particle {
+    position: fixed; pointer-events: none; z-index: 0;
+    width: 2px; height: 2px;
+    background: rgba(200,160,80,0.3);
+    border-radius: 50%;
+    animation: float 8s infinite ease-in-out;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+    20% { opacity: 0.4; }
+    50% { opacity: 0.15; }
+    80% { opacity: 0.35; }
+  }
+
+  /* Main container */
+  .container {
+    position: relative; z-index: 1;
+    max-width: 820px; margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center; padding: 48px 20px 32px;
+    border-bottom: 2px solid rgba(180,140,60,0.3);
+    margin-bottom: 36px;
+  }
+  .header .crest {
+    font-size: 48px; margin-bottom: 8px;
+    opacity: 0.7;
+  }
+  .header h1 {
+    font-size: 28px; font-weight: normal;
+    letter-spacing: 4px;
+    color: #c8a850;
+    text-shadow: 0 0 40px rgba(180,140,60,0.3);
+  }
+  .header .subtitle {
+    font-size: 14px; color: #8a7554;
+    margin-top: 8px; letter-spacing: 2px;
+  }
+  .header .info-line {
+    font-size: 13px; color: #6a5a40;
+    margin-top: 16px;
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-title {
+    font-size: 18px; letter-spacing: 3px;
+    color: #b89840;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(160,130,60,0.25);
+    margin-bottom: 24px;
+  }
+
+  /* Questions */
+  .question {
+    background: rgba(40,24,10,0.6);
+    border: 1px solid rgba(140,110,50,0.2);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+  }
+  .question.answered { border-color: rgba(160,120,50,0.4); }
+  .question.correct { border-color: rgba(80,160,80,0.5); background: rgba(20,40,20,0.3); }
+  .question.incorrect { border-color: rgba(180,60,60,0.5); background: rgba(40,20,20,0.3); }
+  .q-num {
+    font-size: 13px; color: #8a7040; margin-bottom: 8px;
+  }
+  .q-text {
+    font-size: 15px; line-height: 1.7; margin-bottom: 14px;
+    color: #d4c5a0;
+  }
+  .options {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid rgba(120,100,50,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+  .option:hover {
+    background: rgba(160,120,40,0.1);
+    border-color: rgba(160,120,40,0.4);
+  }
+  .option.selected {
+    background: rgba(180,140,40,0.15);
+    border-color: rgba(180,140,40,0.5);
+  }
+  .option.correct-answer {
+    background: rgba(60,140,60,0.2);
+    border-color: rgba(80,160,80,0.6);
+  }
+  .option.wrong-answer {
+    background: rgba(180,60,60,0.2);
+    border-color: rgba(180,60,60,0.5);
+  }
+  .option input[type="radio"] {
+    accent-color: #b89840;
+  }
+
+  /* True/False */
+  .tf-options {
+    display: flex; gap: 24px;
+  }
+  .tf-option {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; font-size: 14px;
+  }
+
+  /* Short Answer */
+  .sa-textarea {
+    width: 100%; min-height: 200px;
+    background: rgba(30,18,8,0.8);
+    border: 1px solid rgba(140,110,50,0.3);
+    border-radius: 6px;
+    color: #d4c5a0;
+    font-family: inherit; font-size: 14px;
+    padding: 16px; line-height: 1.7;
+    resize: vertical;
+  }
+  .sa-textarea:focus {
+    outline: none;
+    border-color: rgba(180,140,40,0.6);
+    box-shadow: 0 0 12px rgba(160,120,30,0.1);
+  }
+
+  /* Submit */
+  .submit-area {
+    text-align: center; margin-top: 36px;
+  }
+  .btn-submit {
+    padding: 14px 56px;
+    font-size: 16px; letter-spacing: 3px;
+    background: linear-gradient(135deg, rgba(180,130,40,0.4), rgba(140,100,30,0.3));
+    border: 1px solid rgba(200,150,50,0.5);
+    color: #d4b860;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .btn-submit:hover {
+    background: linear-gradient(135deg, rgba(200,150,50,0.5), rgba(160,120,40,0.4));
+    box-shadow: 0 0 24px rgba(180,130,30,0.2);
+  }
+  .btn-submit:disabled {
+    opacity: 0.4; cursor: not-allowed;
+  }
+
+  /* Result Modal */
+  .result-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10,6,2,0.85); z-index: 100;
+    justify-content: center; align-items: center;
+  }
+  .result-overlay.show { display: flex; }
+  .result-card {
+    background: linear-gradient(135deg, #2a1a0a, #1a1208);
+    border: 2px solid rgba(200,150,50,0.4);
+    border-radius: 12px;
+    padding: 40px 36px; max-width: 560px; width: 90%;
+    text-align: center;
+  }
+  .result-image { width: 200px; height: 200px; object-fit: cover; border-radius: 8px; margin: 0 auto 20px; display: block; border: 2px solid rgba(200,150,50,0.3); box-shadow: 0 0 20px rgba(200,150,50,0.15); }
+  .result-grade {
+    font-size: 64px; font-weight: bold;
+    margin: 16px 0;
+  }
+  .grade-S { color: #ffd700; text-shadow: 0 0 30px rgba(255,200,0,0.5); }
+  .grade-A { color: #c0a0ff; text-shadow: 0 0 20px rgba(180,140,255,0.4); }
+  .grade-B { color: #80b8e0; text-shadow: 0 0 20px rgba(100,160,220,0.4); }
+  .grade-D { color: #a0a0a0; text-shadow: 0 0 20px rgba(150,150,150,0.3); }
+.grade-C { color: #d08060; text-shadow: 0 0 20px rgba(200,120,80,0.3); }
+  .result-score {
+    font-size: 22px; color: #b89840; margin-bottom: 8px;
+  }
+  .result-breakdown {
+    font-size: 13px; color: #8a7554; margin-bottom: 20px;
+  }
+  .result-comment {
+    font-size: 14px; line-height: 1.8; color: #c8b888;
+    font-style: italic; margin-bottom: 24px;
+    text-align: left; padding: 16px; 
+    background: rgba(30,18,8,0.5);
+    border-radius: 6px;
+  }
+  .btn-close {
+    padding: 10px 32px; font-size: 14px;
+    background: rgba(140,100,30,0.3);
+    border: 1px solid rgba(180,130,40,0.4);
+    color: #b89840; border-radius: 4px;
+    cursor: pointer; font-family: inherit;
+  }
+  .btn-close:hover { background: rgba(180,130,40,0.4); }
+
+  /* Progress */
+  .progress-bar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(20,12,6,0.9);
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(140,100,30,0.2);
+  }
+  .progress-fill {
+    height: 3px; background: #b89840; 
+    border-radius: 2px; transition: width 0.3s;
+  }
+  .progress-text {
+    font-size: 12px; color: #8a7040; white-space: nowrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .container { padding: 20px 12px 60px; }
+    .header h1 { font-size: 22px; }
+    .question { padding: 14px 16px; }
+  }
+
+  /* Subtle book stacks */
+  .book-stack {
+    position: fixed; z-index: 0; pointer-events: none;
+    opacity: 0.08;
+  }
+  .book {
+    border-radius: 1px 3px 3px 1px;
+    position: absolute;
+  }
+  .bs1 { bottom: 6%; left: 7%; display: flex; gap: 2px; align-items: flex-end; }
+  .bs1 .b1 { width: 14px; height: 90px; background: #8a6a30; }
+  .bs1 .b2 { width: 10px; height: 78px; background: #6a5020; }
+  .bs1 .b3 { width: 16px; height: 100px; background: #a07838; }
+  .bs1 .b4 { width: 9px; height: 68px; background: #7a5a28; }
+  .bs2 { bottom: 8%; right: 9%; display: flex; gap: 2px; align-items: flex-end; flex-direction: row-reverse; }
+  .bs2 .b1 { width: 13px; height: 85px; background: #785828; }
+  .bs2 .b2 { width: 17px; height: 105px; background: #907040; }
+  .bs2 .b3 { width: 11px; height: 72px; background: #684818; }
+  .bs2 .b4 { width: 12px; height: 60px; background: #b08848; transform: rotate(-8deg); }
+</style>
+</head>
+<body>
+<!-- Background -->
+<div class="bg-layer">
+  <div class="bg-dome"></div>
+  <div class="candle c1"><div class="candle-flame"></div><div class="candle-body"></div></div>
+  <div class="candle c2"><div class="candle-flame"></div><div class="candle-body"></div></div>
+  <div class="candle c3"><div class="candle-flame"></div><div class="candle-body"></div></div>
+  <div class="candle c4"><div class="candle-flame"></div><div class="candle-body"></div></div>
+  <div class="candle c5"><div class="candle-flame"></div><div class="candle-body"></div></div>
+  <div class="candle c6"><div class="candle-flame"></div><div class="candle-body"></div></div>
+  <div class="book-stack bs1">
+    <div class="book b1"></div><div class="book b2"></div><div class="book b3"></div><div class="book b4"></div>
+  </div>
+  <div class="book-stack bs2">
+    <div class="book b1"></div><div class="book b2"></div><div class="book b3"></div><div class="book b4"></div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar">
+  <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  <div class="progress-text" id="progressText">0 / 26 题已答</div>
+</div>
+
+<div class="container" id="quizContainer">
+
+<div class="header">
+  <div class="crest">⚜</div>
+  <h1>圣德赛尔魔法学院</h1>
+  <div class="subtitle">五年级 · 魔法史摸底测验</div>
+  <div class="info-line">
+    <span>总分：80 分</span>
+    <span>合格线：A 级（49 分）</span>
+    <span>时间：不限</span>
+  </div>
+</div>
+
+<!-- ===== 第一部分：单选题（15题，每题2分，共30分） ===== -->
+<div class="section" id="sec-choice">
+  <div class="section-title">一、单选题（15 题 × 2 分 = 30 分）</div>
+
+  <div class="question" data-q="1" data-type="choice" data-answer="B">
+    <div class="q-num">第 1 题</div>
+    <div class="q-text">帷幕——这道将巫师与人类隔绝的穹顶——诞生于哪一年？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q1" value="A" onchange="updateAnswer(1,'A')"><span>A. 公元 925 年</span></label>
+      <label class="option"><input type="radio" name="q1" value="B" onchange="updateAnswer(1,'B')"><span>B. 公元 1077 年</span></label>
+      <label class="option"><input type="radio" name="q1" value="C" onchange="updateAnswer(1,'C')"><span>C. 公元 1215 年</span></label>
+      <label class="option"><input type="radio" name="q1" value="D" onchange="updateAnswer(1,'D')"><span>D. 公元 1492 年</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="2" data-type="choice" data-answer="A">
+    <div class="q-num">第 2 题</div>
+    <div class="q-text">庭代尔·克罗蒂以哪两个权柄熔铸出"暴君"神位？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q2" value="A" onchange="updateAnswer(2,'A')"><span>A. 主宰与欺诈</span></label>
+      <label class="option"><input type="radio" name="q2" value="B" onchange="updateAnswer(2,'B')"><span>B. 主宰与生命</span></label>
+      <label class="option"><input type="radio" name="q2" value="C" onchange="updateAnswer(2,'C')"><span>C. 物质与力量</span></label>
+      <label class="option"><input type="radio" name="q2" value="D" onchange="updateAnswer(2,'D')"><span>D. 物质与欺诈</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="3" data-type="choice" data-answer="C">
+    <div class="q-num">第 3 题</div>
+    <div class="q-text">北海之殇的背后，谁以长达六年的心理诱导间接导致了这场悲剧的发生？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q3" value="A" onchange="updateAnswer(3,'A')"><span>A. 阿里昂</span></label>
+      <label class="option"><input type="radio" name="q3" value="B" onchange="updateAnswer(3,'B')"><span>B. 卡帕塞斯</span></label>
+      <label class="option"><input type="radio" name="q3" value="C" onchange="updateAnswer(3,'C')"><span>C. 奥斯伯特</span></label>
+      <label class="option"><input type="radio" name="q3" value="D" onchange="updateAnswer(3,'D')"><span>D. 世界主</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="4" data-type="choice" data-answer="B">
+    <div class="q-num">第 4 题</div>
+    <div class="q-text">诺伐圣廷骑士团中，于 1989 年陨落的次席是谁？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q4" value="A" onchange="updateAnswer(4,'A')"><span>A. 厄尼西姆</span></label>
+      <label class="option"><input type="radio" name="q4" value="B" onchange="updateAnswer(4,'B')"><span>B. 加利贝尔</span></label>
+      <label class="option"><input type="radio" name="q4" value="C" onchange="updateAnswer(4,'C')"><span>C. 普里多尼</span></label>
+      <label class="option"><input type="radio" name="q4" value="D" onchange="updateAnswer(4,'D')"><span>D. 赫法恩斯</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="5" data-type="choice" data-answer="B">
+    <div class="q-num">第 5 题</div>
+    <div class="q-text">阿里昂——整个帷幕世界最根本的"命运主"——其本质是什么？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q5" value="A" onchange="updateAnswer(5,'A')"><span>A. 六真神意志的聚合人格</span></label>
+      <label class="option"><input type="radio" name="q5" value="B" onchange="updateAnswer(5,'B')"><span>B. 无相众生面与米耶琉斯·摩伊拉的融合体</span></label>
+      <label class="option"><input type="radio" name="q5" value="C" onchange="updateAnswer(5,'C')"><span>C. 旧神残魂与现世巫师的融合体</span></label>
+      <label class="option"><input type="radio" name="q5" value="D" onchange="updateAnswer(5,'D')"><span>D. 菩提中沉睡的远古意识</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="6" data-type="choice" data-answer="B">
+    <div class="q-num">第 6 题</div>
+    <div class="q-text">巫师等级体系中，代表"巫师的终点、神明的起点"的最高可达成等级是什么？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q6" value="A" onchange="updateAnswer(6,'A')"><span>A. 绝鸣（Lv.6）</span></label>
+      <label class="option"><input type="radio" name="q6" value="B" onchange="updateAnswer(6,'B')"><span>B. 驻境（Lv.7）</span></label>
+      <label class="option"><input type="radio" name="q6" value="C" onchange="updateAnswer(6,'C')"><span>C. 源溯（Lv.5）</span></label>
+      <label class="option"><input type="radio" name="q6" value="D" onchange="updateAnswer(6,'D')"><span>D. 律痕（Lv.4）</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="7" data-type="choice" data-answer="C">
+    <div class="q-num">第 7 题</div>
+    <div class="q-text">公元 385 年，谁以寿命为代价从阿里昂手中强行夺取了一丝"命运"权柄？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q7" value="A" onchange="updateAnswer(7,'A')"><span>A. 庭代尔·克罗蒂</span></label>
+      <label class="option"><input type="radio" name="q7" value="B" onchange="updateAnswer(7,'B')"><span>B. 奥斯伯特</span></label>
+      <label class="option"><input type="radio" name="q7" value="C" onchange="updateAnswer(7,'C')"><span>C. 周公明</span></label>
+      <label class="option"><input type="radio" name="q7" value="D" onchange="updateAnswer(7,'D')"><span>D. 拉苏斯</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="8" data-type="choice" data-answer="C">
+    <div class="q-num">第 8 题</div>
+    <div class="q-text">卡西乌斯在北海之殇中坠海后，被谁捕获并承受了长达十余年的洗脑？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q8" value="A" onchange="updateAnswer(8,'A')"><span>A. 阿里昂派遣的世界主</span></label>
+      <label class="option"><input type="radio" name="q8" value="B" onchange="updateAnswer(8,'B')"><span>B. 天上神国的世界主</span></label>
+      <label class="option"><input type="radio" name="q8" value="C" onchange="updateAnswer(8,'C')"><span>C. 旧黑夜之神残魂卡帕塞斯</span></label>
+      <label class="option"><input type="radio" name="q8" value="D" onchange="updateAnswer(8,'D')"><span>D. 镜中世界的混沌主</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="9" data-type="choice" data-answer="C">
+    <div class="q-num">第 9 题</div>
+    <div class="q-text">1990 年，庭代尔将初具雏形的诺伐圣廷封印于六大世界中的哪一个？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q9" value="A" onchange="updateAnswer(9,'A')"><span>A. 灵之世界</span></label>
+      <label class="option"><input type="radio" name="q9" value="B" onchange="updateAnswer(9,'B')"><span>B. 亡者世界</span></label>
+      <label class="option"><input type="radio" name="q9" value="C" onchange="updateAnswer(9,'C')"><span>C. 镜中世界</span></label>
+      <label class="option"><input type="radio" name="q9" value="D" onchange="updateAnswer(9,'D')"><span>D. 星之世界</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="10" data-type="choice" data-answer="B">
+    <div class="q-num">第 10 题</div>
+    <div class="q-text">法德利·克罗蒂——那个为达里安编织了十六年"楚门的世界"的人——其本质是什么？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q10" value="A" onchange="updateAnswer(10,'A')"><span>A. 庭代尔以自身血脉为媒介转生的继承者</span></label>
+      <label class="option"><input type="radio" name="q10" value="B" onchange="updateAnswer(10,'B')"><span>B. 以生命与物质双权柄创造的有生命的巫师造物</span></label>
+      <label class="option"><input type="radio" name="q10" value="C" onchange="updateAnswer(10,'C')"><span>C. 奥斯伯特以智慧权柄灌输培育的接班人</span></label>
+      <label class="option"><input type="radio" name="q10" value="D" onchange="updateAnswer(10,'D')"><span>D. 周公明以命运碎片制作的转世容器</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="11" data-type="choice" data-answer="C">
+    <div class="q-num">第 11 题</div>
+    <div class="q-text">血河源流事件中，提亚纳斯使用了哪件编号 004 的神权造物来操纵塔洛斯帝国元首？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q11" value="A" onchange="updateAnswer(11,'A')"><span>A. 帷幕</span></label>
+      <label class="option"><input type="radio" name="q11" value="B" onchange="updateAnswer(11,'B')"><span>B. 暴君的剑</span></label>
+      <label class="option"><input type="radio" name="q11" value="C" onchange="updateAnswer(11,'C')"><span>C. 不逆轮镜</span></label>
+      <label class="option"><input type="radio" name="q11" value="D" onchange="updateAnswer(11,'D')"><span>D. 菩提</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="12" data-type="choice" data-answer="C">
+    <div class="q-num">第 12 题</div>
+    <div class="q-text">施法四阶段中，被称为"通过一种能与自然法则共鸣的特殊语言对法术进行约束"的阶段是？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q12" value="A" onchange="updateAnswer(12,'A')"><span>A. 自然力量连接</span></label>
+      <label class="option"><input type="radio" name="q12" value="B" onchange="updateAnswer(12,'B')"><span>B. 力量塑形</span></label>
+      <label class="option"><input type="radio" name="q12" value="C" onchange="updateAnswer(12,'C')"><span>C. 咒文稳定</span></label>
+      <label class="option"><input type="radio" name="q12" value="D" onchange="updateAnswer(12,'D')"><span>D. 力量导出</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="13" data-type="choice" data-answer="B">
+    <div class="q-num">第 13 题</div>
+    <div class="q-text">帷幕世界五块大陆中，位于中央、文明底色为"美食荒漠"且人口约 3 亿的是？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q13" value="A" onchange="updateAnswer(13,'A')"><span>A. 艾森洛德</span></label>
+      <label class="option"><input type="radio" name="q13" value="B" onchange="updateAnswer(13,'B')"><span>B. 卡莫瑞亚</span></label>
+      <label class="option"><input type="radio" name="q13" value="C" onchange="updateAnswer(13,'C')"><span>C. 茨威尔格诺</span></label>
+      <label class="option"><input type="radio" name="q13" value="D" onchange="updateAnswer(13,'D')"><span>D. 昂尚特维斯</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="14" data-type="choice" data-answer="C">
+    <div class="q-num">第 14 题</div>
+    <div class="q-text">神眷之战（1988—1990）的直接导火索是什么？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q14" value="A" onchange="updateAnswer(14,'A')"><span>A. 诺伐圣廷建立后直接对塔洛斯宣战</span></label>
+      <label class="option"><input type="radio" name="q14" value="B" onchange="updateAnswer(14,'B')"><span>B. 卡西乌斯以黑夜之神身份发动复仇</span></label>
+      <label class="option"><input type="radio" name="q14" value="C" onchange="updateAnswer(14,'C')"><span>C. 血河源流的受害国家在以奇列布帝国安德森三世领导下发动反击</span></label>
+      <label class="option"><input type="radio" name="q14" value="D" onchange="updateAnswer(14,'D')"><span>D. 奥斯伯特向庭代尔献计收割灵魂</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="15" data-type="choice" data-answer="C">
+    <div class="q-num">第 15 题</div>
+    <div class="q-text">在帷幕世界的造物体系中，神权造物属于第几级？</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q15" value="A" onchange="updateAnswer(15,'A')"><span>A. 第 5 级</span></label>
+      <label class="option"><input type="radio" name="q15" value="B" onchange="updateAnswer(15,'B')"><span>B. 第 7 级</span></label>
+      <label class="option"><input type="radio" name="q15" value="C" onchange="updateAnswer(15,'C')"><span>C. 第 8 级</span></label>
+      <label class="option"><input type="radio" name="q15" value="D" onchange="updateAnswer(15,'D')"><span>D. 第 10 级</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 第二部分：判断题（10题，每题2分，共20分） ===== -->
+<div class="section" id="sec-tf">
+  <div class="section-title">二、判断题（10 题 × 2 分 = 20 分）</div>
+
+  <div class="question" data-q="16" data-type="tf" data-answer="F">
+    <div class="q-num">第 16 题</div>
+    <div class="q-text">帷幕世界的巫师施法时可以徒手释放魔法，魔杖只是辅助工具，并非必需。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q16" value="T" onchange="updateAnswer(16,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q16" value="F" onchange="updateAnswer(16,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="17" data-type="tf" data-answer="F">
+    <div class="q-num">第 17 题</div>
+    <div class="q-text">加利贝尔出身翼人族，其神格为欲望。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q17" value="T" onchange="updateAnswer(17,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q17" value="F" onchange="updateAnswer(17,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="18" data-type="tf" data-answer="F">
+    <div class="q-num">第 18 题</div>
+    <div class="q-text">达里安·霍夫科特作为周公明的第七任转世，保存了此前六世的完整记忆。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q18" value="T" onchange="updateAnswer(18,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q18" value="F" onchange="updateAnswer(18,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="19" data-type="tf" data-answer="T">
+    <div class="q-num">第 19 题</div>
+    <div class="q-text">奥斯伯特的神格为"智慧"，历代智慧之神继承前人记忆，使其拥有窥视命运的眼界。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q19" value="T" onchange="updateAnswer(19,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q19" value="F" onchange="updateAnswer(19,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="20" data-type="tf" data-answer="F">
+    <div class="q-num">第 20 题</div>
+    <div class="q-text">普里多尼是诺伐圣廷骑士团中唯一能平静接受庭代尔之死的成员。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q20" value="T" onchange="updateAnswer(20,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q20" value="F" onchange="updateAnswer(20,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="21" data-type="tf" data-answer="T">
+    <div class="q-num">第 21 题</div>
+    <div class="q-text">在施法原理中，魔杖承担了导出、稳定、降低回路压力和提高精度的多重作用。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q21" value="T" onchange="updateAnswer(21,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q21" value="F" onchange="updateAnswer(21,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="22" data-type="tf" data-answer="T">
+    <div class="q-num">第 22 题</div>
+    <div class="q-text">帷幕世界五块大陆的陆地总面积约 5000 万平方公里，总人口约 9 亿。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q22" value="T" onchange="updateAnswer(22,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q22" value="F" onchange="updateAnswer(22,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="23" data-type="tf" data-answer="T">
+    <div class="q-num">第 23 题</div>
+    <div class="q-text">骑士团共有七位成员。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q23" value="T" onchange="updateAnswer(23,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q23" value="F" onchange="updateAnswer(23,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="24" data-type="tf" data-answer="F">
+    <div class="q-num">第 24 题</div>
+    <div class="q-text">每种魔法体系只能通向唯一一个权柄。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q24" value="T" onchange="updateAnswer(24,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q24" value="F" onchange="updateAnswer(24,'F')"><span>错误</span></label>
+    </div>
+  </div>
+
+  <div class="question" data-q="25" data-type="tf" data-answer="T">
+    <div class="q-num">第 25 题</div>
+    <div class="q-text">法德利·克罗蒂在伦敦以修改记忆的方式为达里安·霍夫科特编织了长达十六年的"楚门的世界"。</div>
+    <div class="tf-options">
+      <label class="tf-option"><input type="radio" name="q25" value="T" onchange="updateAnswer(25,'T')"><span>正确</span></label>
+      <label class="tf-option"><input type="radio" name="q25" value="F" onchange="updateAnswer(25,'F')"><span>错误</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 第三部分：简答题（1题，30分） ===== -->
+<div class="section" id="sec-sa">
+  <div class="section-title">三、简答题（1 题 × 30 分）</div>
+
+  <div class="question" data-q="26" data-type="shortanswer">
+    <div class="q-num">第 26 题（30 分）</div>
+    <div class="q-text">请简述庭代尔·克罗蒂殉道的原因，并列举他留给后世的两项重要遗产。</div>
+    <textarea class="sa-textarea" id="saAnswer" placeholder="在此作答……" oninput="updateAnswer(26, this.value)"></textarea>
+  </div>
+</div>
+
+<!-- Submit -->
+<div class="submit-area">
+  <button class="btn-submit" id="btnSubmit" onclick="submitQuiz()">提交答卷</button>
+</div>
+
+</div><!-- .container -->
+
+<!-- Result Modal -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard">
+  </div>
+</div>
+
+<script>
+// ===== MODEL ANSWER FOR SHORT ANSWER GRADING =====
+const MODEL_KEYWORDS = {
+  tier1: ["殉道", "赴死", "陨落", "神眷之战", "结束战争", "卡西乌斯", "微笑", "牺牲"],
+  tier2: ["诺伐圣廷", "骑士团", "封印", "镜中世界", "解散", "遗产"],
+  tier3: ["法德利", "达里安", "克罗蒂", "命运剧本", "造物", "楚门", "伦敦"]
+};
+
+function gradeShortAnswer(text) {
+  if (!text || text.trim().length < 10) return 0;
+  
+  var lower = text.toLowerCase();
+  var score = 0;
+  
+  var tiers = [
+    { keywords: MODEL_KEYWORDS.tier1, points: 12 },
+    { keywords: MODEL_KEYWORDS.tier2, points: 9 },
+    { keywords: MODEL_KEYWORDS.tier3, points: 9 }
+  ];
+  
+  for (var t = 0; t < tiers.length; t++) {
+    var tier = tiers[t];
+    var matches = 0;
+    for (var k = 0; k < tier.keywords.length; k++) {
+      if (lower.indexOf(tier.keywords[k].toLowerCase()) !== -1) matches++;
+    }
+    if (matches >= 2) {
+      score += tier.points;
+    } else if (matches >= 1) {
+      score += Math.round(tier.points * 0.55);
+    }
+  }
+  
+  return Math.min(30, Math.round(score));
+}
+
+// ===== QUIZ LOGIC =====
+var TOTAL_QUESTIONS = 26;
+var answers = {};
+var submitted = false;
+
+function updateAnswer(qNum, value) {
+  if (submitted) return;
+  answers[qNum] = value;
+  
+  // Visual feedback
+  var qEl = document.querySelector('[data-q="' + qNum + '"]');
+  if (qEl && value) qEl.classList.add('answered');
+  
+  updateProgress();
+}
+
+function updateProgress() {
+  var count = Object.keys(answers).length;
+  var pct = Math.round((count / TOTAL_QUESTIONS) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / ' + TOTAL_QUESTIONS + ' 题已答';
+}
+
+function submitQuiz() {
+  // Check all answered
+  for (var i = 1; i <= TOTAL_QUESTIONS; i++) {
+    if (!answers[i]) {
+      alert('请完成第 ' + i + ' 题后再提交。');
+      var target = document.querySelector('[data-q="' + i + '"]');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
+  
+  submitted = true;
+  var btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = '已提交';
+  
+  var choiceScore = 0;
+  var tfScore = 0;
+  
+  // Grade choices
+  for (var i = 1; i <= 15; i++) {
+    var qEl = document.querySelector('[data-q="' + i + '"]');
+    var correctAns = qEl.getAttribute('data-answer');
+    var userAns = answers[i];
+    
+    if (userAns === correctAns) {
+      choiceScore += 2;
+      qEl.classList.add('correct');
+      var correctOpt = qEl.querySelector('input[value="' + correctAns + '"]');
+      if (correctOpt) correctOpt.closest('.option').classList.add('correct-answer');
+    } else {
+      qEl.classList.add('incorrect');
+      var correctOpt = qEl.querySelector('input[value="' + correctAns + '"]');
+      if (correctOpt) correctOpt.closest('.option').classList.add('correct-answer');
+      var wrongOpt = qEl.querySelector('input[value="' + userAns + '"]');
+      if (wrongOpt) wrongOpt.closest('.option').classList.add('wrong-answer');
+    }
+  }
+  
+  // Grade T/F
+  for (var i = 16; i <= 25; i++) {
+    var qEl = document.querySelector('[data-q="' + i + '"]');
+    var correctAns = qEl.getAttribute('data-answer');
+    var userAns = answers[i];
+    
+    if (userAns === correctAns) {
+      tfScore += 2;
+      qEl.classList.add('correct');
+      var correctOpt = qEl.querySelector('input[value="' + correctAns + '"]');
+      if (correctOpt) correctOpt.closest('.tf-option').style.color = '#80c080';
+    } else {
+      qEl.classList.add('incorrect');
+      var correctOpt = qEl.querySelector('input[value="' + correctAns + '"]');
+      if (correctOpt) correctOpt.closest('.tf-option').style.color = '#80c080';
+      var wrongOpt = qEl.querySelector('input[value="' + userAns + '"]');
+      if (wrongOpt) wrongOpt.closest('.tf-option').style.color = '#e08080';
+    }
+  }
+  
+  // Grade short answer
+  var saText = document.getElementById('saAnswer').value;
+  var saScore = gradeShortAnswer(saText);
+  
+  var totalScore = choiceScore + tfScore + saScore;
+  
+  // Determine grade
+  var grade, gradeClass, character, comment;
+  if (totalScore >= 65) {
+    grade = 'S 级';
+    gradeClass = 'grade-S';
+    character = '奥斯伯特';
+    comment = '你是奥斯伯特本人吧？作为昂尚特维斯的智慧之神、帷幕世界棋力最深的那只手，你不但把整部魔法史倒背如流，还能从每一个历史的涟漪里读出背后搅动的大手。不过我得提醒你：当年你在北海边对那个红瞳少年做了六年心理暗示——这分数，可别成了你的又一个"算计"哦。总之，S 级意味着你不仅精通史实，还看清了那些藏在纸页背面的阳谋。希望你拿这份智慧去做比"间接导致北海之殇"稍微善良一点的事。';
+  } else if (totalScore >= 49) {
+    grade = 'A 级';
+    gradeClass = 'grade-A';
+    character = '卡西乌斯·希尔伯特';
+    comment = '合格的魔法史学者！你像卡西乌斯一样，在漫长的黑暗里保住了对真相的洞悉——只不过他没有这份运气在试卷上写答案，而你做到了。A 级说明你掌握了从帷幕诞生到暴君陨落的完整脉络，足以在圣德赛尔的走廊上昂首走过。当然，卡西乌斯的前半生证明了：知道真相和活出真相是两回事。你的试卷答得漂亮，但愿你的人生不用像他那样，在被洗脑十几年后才发现自己恨错了人。';
+  } else if (totalScore >= 33) {
+    grade = 'B 级';
+    gradeClass = 'grade-B';
+    character = '辛克莱尔·德维雷斯';
+    comment = '你的魔法史水平大概与辛克莱尔·德维雷斯——魔法联合部裁决执行处处长，捍卫正义与规则的"真实之神"一般，看到你的分数，辛克莱尔大概会用仅剩的手臂拍拍你的肩膀说："还行，至少能走实战学派。" B 级意味着你对魔法史有个大致的轮廓，但细节上有些模糊——就像辛克莱尔当年也没搞懂庭代尔那个连自己都说不清的权柄组合。回去再翻翻书吧，别让下一次的"真实"来得太迟。记住：学习永远比战斗轻松，而你还有机会。';
+  } else if (totalScore >= 17) {
+    grade = 'C 级';
+    gradeClass = 'grade-C';
+    character = '庭代尔·克罗蒂';
+    comment = '你的魔法史水平跟庭代尔·克罗蒂——帷幕世界唯一行走于大地的真神、暴君本人——基本一致，如果看到这份答卷，大概会是理解的表情，然后说一句："你比我当年单挑魔法联合部的时候还不讲道理。" C 级意味着你对魔法史的了解就像庭代尔当年对命运的认知：知道它存在，但还没看清它的全貌。好消息是，庭代尔花了二十二年才从北海走出，踏上天国——而你只需要多读几本书。坏消息是，他没有第二次机会，你有。所以，放下这份试卷，去图书馆吧。暴君可能会理解你，但阅卷老师不一定。';
+  } else {
+    grade = 'D 级';
+    gradeClass = 'grade-D';
+    character = '莉丝特拉塔';
+    comment = '你的魔法史学习进度大概跟那位镜中游荡的怪灵——"悖论"小姐相当，作为一切"反常"的集合体，她不用学习魔法史——但是你怎么会在这个层级？难不成你也每天以不同的身份醒来在不同的地点，然后随机开始半天不同的人生——于是常规的知识系统对你毫无意义？总之，D 级意味着你与莉丝特拉塔小姐的唯一相同点大概就是你们看着魔法史学教科书时都像在看失传两千年的古老咒文——无序、混乱且难以理解，希望你至少能在魔法史学课上睁开眼睛，好吗？否则学费就白溜走了。';
+  }
+  
+  // Show result
+  var resultCard = document.getElementById('resultCard');
+  var imagePath = 'Y:/帷幕源文件/评分图/' + grade.charAt(0) + '.png';
+  resultCard.innerHTML = '<img class="result-image" src="' + imagePath + '" alt="' + grade + '">' +
+    '<div class="result-score">总分 <span style="font-size:36px;color:#d4b860;">' + totalScore + '</span> / 80</div>' +
+    '<div class="result-breakdown">单选题 ' + choiceScore + '/30 &nbsp;|&nbsp; 判断题 ' + tfScore + '/20 &nbsp;|&nbsp; 简答题 ' + saScore + '/30</div>' +
+    '<div class="result-grade ' + gradeClass + '">' + grade + '</div>' +
+    '<div style="font-size:15px;color:#a08850;margin-bottom:12px;">—— ' + character + ' ——</div>' +
+    '<div class="result-comment">' + comment + '</div>' +
+    '<button class="btn-close" onclick="closeResult()">关闭</button>';
+  
+  document.getElementById('resultOverlay').classList.add('show');
+  
+  // Scroll to top for review
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Keyboard shortcut: Ctrl+Enter to submit
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 'Enter' && !submitted) {
+    submitQuiz();
+  }
+});
+</script>
+
+</body>
+</html>

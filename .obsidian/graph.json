@@ -1,0 +1,72 @@
+{
+  "collapse-filter": false,
+  "search": "-path:\"模板\"",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:\"人物\"",
+      "color": {
+        "a": 1,
+        "rgb": 15756645
+      }
+    },
+    {
+      "query": "path:\"世界观\"",
+      "color": {
+        "a": 1,
+        "rgb": 6787561
+      }
+    },
+    {
+      "query": "path:\"魔法体系\"",
+      "color": {
+        "a": 1,
+        "rgb": 6347744
+      }
+    },
+    {
+      "query": "path:\"编年史\"",
+      "color": {
+        "a": 1,
+        "rgb": 15638596
+      }
+    },
+    {
+      "query": "path:\"短篇\"",
+      "color": {
+        "a": 1,
+        "rgb": 12882931
+      }
+    },
+    {
+      "query": "path:\"工作台\"",
+      "color": {
+        "a": 1,
+        "rgb": 14267242
+      }
+    },
+    {
+      "query": "path:\"圣德赛尔\"",
+      "color": {
+        "a": 1,
+        "rgb": 15638596
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0.6,
+  "nodeSizeMultiplier": 1.5,
+  "lineSizeMultiplier": 1.2,
+  "collapse-forces": true,
+  "centerStrength": 0.8,
+  "repelStrength": 8,
+  "linkStrength": 1,
+  "linkDistance": 170,
+  "scale": 1.965556045656666,
+  "close": true
+}
