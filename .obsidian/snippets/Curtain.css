@@ -1,0 +1,242 @@
+/* Curtain vault visual system: restrained dark fantasy, readable first. */
+
+body {
+  --curtain-gold: #d9b36a;
+  --curtain-copper: #c58d59;
+  --curtain-rose: #c95a6a;
+  --curtain-blue: #4a8cc7;
+  --curtain-violet: #7b5ea7;
+  --curtain-green: #2e9a6a;
+  --curtain-orange: #d97706;
+  --curtain-radius: 10px;
+  --curtain-border: color-mix(in srgb, var(--text-muted) 24%, transparent);
+}
+
+.theme-dark {
+  --accent-h: 350;
+  --accent-s: 62%;
+  --accent-l: 52%;
+
+  --background-primary: #0d0d13;
+  --background-secondary: #14151d;
+  --background-modifier-border: #2a2434;
+  --titlebar-background: #0a0a0f;
+  --titlebar-background-focused: #101018;
+
+  --text-normal: #ded9d0;
+  --text-muted: #a29aa1;
+  --text-faint: #766f7c;
+  --text-accent: #e56a70;
+  --text-accent-hover: #ff8a86;
+  --text-selection: #4d2030;
+
+  --link-color: #e7a3a6;
+  --link-color-hover: #ffcbc5;
+  --link-unresolved-color: #9d7ea7;
+
+  --h1-color: #d9b36a;
+  --h2-color: #c58d59;
+  --h3-color: #c3a07a;
+  --inline-title-color: #e4c282;
+
+  --tag-color: #d9a06a;
+  --tag-background: rgba(201, 90, 106, 0.18);
+  --tag-background-hover: rgba(201, 90, 106, 0.3);
+}
+
+.theme-light {
+  --accent-h: 350;
+  --accent-s: 54%;
+  --accent-l: 43%;
+
+  --background-primary: #fbf8f1;
+  --background-secondary: #f2ede3;
+  --background-modifier-border: #d8cdbc;
+
+  --text-normal: #332e2b;
+  --text-muted: #71665f;
+  --text-faint: #9a8d83;
+  --text-accent: #a64250;
+  --text-accent-hover: #7f2736;
+  --text-selection: rgba(201, 90, 106, 0.18);
+
+  --link-color: #9c3f4d;
+  --link-color-hover: #6f2532;
+  --link-unresolved-color: #85668e;
+
+  --h1-color: #8b6428;
+  --h2-color: #9a5d32;
+  --h3-color: #765a3d;
+  --inline-title-color: #8b6428;
+
+  --tag-color: #7f4f24;
+  --tag-background: rgba(197, 141, 89, 0.14);
+  --tag-background-hover: rgba(197, 141, 89, 0.25);
+}
+
+.theme-dark h1,
+.theme-dark .inline-title,
+.theme-light h1,
+.theme-light .inline-title {
+  letter-spacing: 0.08em;
+}
+
+/* Reading rhythm */
+.markdown-rendered,
+.markdown-source-view.mod-cm6 .cm-scroller {
+  line-height: 1.78;
+}
+
+.markdown-rendered h2 {
+  margin-top: 2.1em;
+  padding-bottom: 0.24em;
+  border-bottom: 1px solid var(--curtain-border);
+}
+
+.markdown-rendered h3 {
+  margin-top: 1.6em;
+}
+
+.markdown-rendered hr {
+  height: 1px;
+  margin: 2.4em 0;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--curtain-rose), transparent);
+  opacity: 0.55;
+}
+
+.markdown-rendered p,
+.markdown-rendered li {
+  text-wrap: pretty;
+}
+
+/* MOC and dashboard pages */
+.markdown-preview-view.moc,
+.markdown-source-view.mod-cm6.moc {
+  --file-line-width: 980px;
+}
+
+.moc .inline-title,
+.markdown-preview-view.moc h1,
+.markdown-source-view.mod-cm6.moc .HyperMD-header-1 {
+  text-align: center;
+  color: var(--curtain-gold);
+  letter-spacing: 0.12em;
+}
+
+.moc .inline-title::after,
+.markdown-preview-view.moc h1::after {
+  content: "";
+  display: block;
+  width: min(220px, 44%);
+  height: 1px;
+  margin: 0.65rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--curtain-gold), transparent);
+  opacity: 0.72;
+}
+
+.markdown-preview-view.moc h2,
+.markdown-source-view.mod-cm6.moc .HyperMD-header-2 {
+  color: var(--curtain-copper);
+}
+
+.curtain-dashboard .dataview.table-view-table {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.curtain-dashboard .dataview.table-view-table th {
+  white-space: nowrap;
+}
+
+/* Tables */
+.markdown-rendered table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--curtain-border);
+  border-radius: var(--curtain-radius);
+  overflow: hidden;
+}
+
+.markdown-rendered thead {
+  background: color-mix(in srgb, var(--curtain-gold) 10%, var(--background-secondary));
+}
+
+.markdown-rendered th {
+  color: var(--curtain-gold);
+  font-weight: 650;
+}
+
+.markdown-rendered tr:hover td {
+  background: color-mix(in srgb, var(--curtain-rose) 5%, transparent);
+}
+
+/* Links and tags */
+.markdown-rendered .internal-link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 36%, transparent);
+}
+
+.markdown-rendered .internal-link:hover {
+  text-decoration-color: currentColor;
+}
+
+.tag {
+  border: 1px solid color-mix(in srgb, var(--tag-color) 26%, transparent);
+  border-radius: 999px;
+  padding-inline: 0.48em;
+}
+
+/* Semantic callouts for canon management */
+.callout[data-callout="canon"] {
+  --callout-color: 217, 179, 106;
+  --callout-icon: lucide-shield-check;
+}
+
+.callout[data-callout="foreshadow"] {
+  --callout-color: 123, 94, 167;
+  --callout-icon: lucide-sparkles;
+}
+
+.callout[data-callout="question"] {
+  --callout-color: 74, 140, 199;
+  --callout-icon: lucide-circle-help;
+}
+
+.callout[data-callout="conflict"] {
+  --callout-color: 201, 90, 106;
+  --callout-icon: lucide-triangle-alert;
+}
+
+.callout[data-callout="status"] {
+  --callout-color: 46, 154, 106;
+  --callout-icon: lucide-gauge;
+}
+
+.callout {
+  border-radius: var(--curtain-radius);
+  border-width: 1px;
+}
+
+/* Keep metadata present but visually secondary. */
+.metadata-container {
+  border: 1px solid var(--curtain-border);
+  border-radius: var(--curtain-radius);
+  background: color-mix(in srgb, var(--background-secondary) 64%, transparent);
+  padding: 0.45rem 0.65rem;
+}
+
+@media (max-width: 700px) {
+  .markdown-preview-view.moc,
+  .markdown-source-view.mod-cm6.moc {
+    --file-line-width: 100%;
+  }
+
+  .markdown-rendered table {
+    display: block;
+    overflow-x: auto;
+  }
+}
