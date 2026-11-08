@@ -1,4 +1,39 @@
-.codex-tmp-running-right/
-.trash/
-.obsidian/cache/
+# Obsidian: device-specific state and caches
 .obsidian/workspace*.json
+.obsidian/cache/
+.obsidian/.cache/
+.obsidian/metadata.json
+.obsidian/graph-layout.json
+.trash/
+
+# Generated distributions; keep local copies, version the sources instead
+/导出/
+*.zip
+*.7z
+*.rar
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+~$*
+*.swp
+*.swo
+*.tmp
+*.temp
+*.log
+*~
+.vscode/
+.idea/
+
+# Local credentials and automation scratch files
+.env
+.env.*
+!.env.example
+.codex-tmp*/
+
+# Optional web tooling outputs
+node_modules/
+dist/
+.cache/
+coverage/
